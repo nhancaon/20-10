@@ -357,28 +357,50 @@
 
 			@media (max-width: 768px) {
 				.text-overlay {
-					transform: translate(-50%, -50%) translateY(-280px);
+					transform: translate(-50%, -50%) translateY(-40vh);
 				}
 				.card-container {
-					transform: translate(-50%, -50%) translateY(140px);
+					transform: translate(-50%, -50%) translateY(35vh);
 				}
 				canvas {
-					transform: translate(-50%, -50%) translateY(-60px) scale(0.8);
+					transform: translate(-50%, -50%) translateY(-5vh) scale(0.7);
 				}
 			}
 
 			@media (max-width: 480px) {
-				.text-overlay {
-					transform: translate(-50%, -50%) translateY(-240px);
+				body {
+					overflow-y: auto;
+					overflow-x: hidden;
 				}
-				.card-container {
-					transform: translate(-50%, -50%) translateY(100px);
+				.container {
+					height: auto;
+					min-height: 100vh;
+					padding: 20px 0;
+				}
+				.text-overlay {
+					transform: translate(-50%, 0);
+					top: 30px;
+					margin-top: 0;
 				}
 				canvas {
-					transform: translate(-50%, -50%) translateY(-40px) scale(0.6);
+					position: relative;
+					transform: translate(-50%, 0) scale(0.55);
+					margin-top: 80px;
+					margin-bottom: -50px;
+				}
+				.card-container {
+					position: relative;
+					transform: translate(-50%, 0);
+					top: auto;
+					left: 50%;
+					margin-top: 20px;
+					margin-bottom: 50px;
 				}
 				.card-content {
 					padding: 25px 20px;
+				}
+				.click-hint {
+					bottom: -40px;
 				}
 			}
 		</style>
