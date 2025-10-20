@@ -19,7 +19,12 @@
 
 			body {
 				overflow: hidden;
-				background: #000;
+				background: linear-gradient(
+					135deg,
+					#000000 0%,
+					#1a0a0f 50%,
+					#000000 100%
+				);
 				font-family: "Quicksand", sans-serif;
 				display: flex;
 				justify-content: center;
@@ -30,44 +35,70 @@
 			.container {
 				position: relative;
 				text-align: center;
+				width: 100%;
+				height: 100vh;
 			}
 
 			canvas {
 				display: block;
-				background: #000;
-				margin-top: -150px;
+				background: transparent;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%) translateY(-80px);
+				animation: heartBeat 1.5s ease-in-out infinite;
+			}
+
+			@keyframes heartBeat {
+				0%,
+				100% {
+					transform: translate(-50%, -50%) translateY(-80px) scale(1);
+				}
+				10% {
+					transform: translate(-50%, -50%) translateY(-80px) scale(1.05);
+				}
+				20% {
+					transform: translate(-50%, -50%) translateY(-80px) scale(1);
+				}
+				30% {
+					transform: translate(-50%, -50%) translateY(-80px) scale(1.05);
+				}
+				40% {
+					transform: translate(-50%, -50%) translateY(-80px) scale(1);
+				}
 			}
 
 			.text-overlay {
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%) translateY(-330px);
 				text-align: center;
 				color: white;
 				pointer-events: none;
 				z-index: 10;
-				margin-top: -330px;
 			}
 
 			.date-text {
-				font-size: 72px;
+				font-size: clamp(48px, 10vw, 72px);
 				font-weight: bold;
 				margin-bottom: 10px;
-				text-shadow: 0 0 20px rgba(247, 96, 112, 0.8);
+				text-shadow: 0 0 20px rgba(247, 96, 112, 0.8),
+					0 0 40px rgba(247, 96, 112, 0.5);
 				animation: glow 2s ease-in-out infinite;
-				letter-spacing: 15px;
+				letter-spacing: clamp(8px, 2vw, 15px);
 				font-family: "Playfair Display", serif;
 			}
 
 			@keyframes glow {
 				0%,
 				100% {
-					text-shadow: 0 0 20px rgba(247, 96, 112, 0.8);
+					text-shadow: 0 0 20px rgba(247, 96, 112, 0.8),
+						0 0 40px rgba(247, 96, 112, 0.5);
 				}
 				50% {
 					text-shadow: 0 0 30px rgba(247, 96, 112, 1),
-						0 0 40px rgba(247, 96, 112, 0.8);
+						0 0 50px rgba(247, 96, 112, 0.8), 0 0 70px rgba(247, 96, 112, 0.6);
 				}
 			}
 
@@ -75,18 +106,22 @@
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				transform: translate(-50%, -50%);
-				margin-top: 250px;
+				transform: translate(-50%, -50%) translateY(180px);
 				perspective: 1500px;
 				z-index: 10;
 			}
 
 			.card {
-				width: 500px;
-				height: 300px;
+				width: min(500px, 90vw);
+				height: min(300px, 50vh);
 				position: relative;
 				transform-style: preserve-3d;
 				cursor: pointer;
+				transition: transform 0.3s ease;
+			}
+
+			.card:hover:not(.open) {
+				transform: scale(1.02);
 			}
 
 			.card-half {
@@ -100,7 +135,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+				transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1);
 				overflow: hidden;
 			}
 
@@ -146,11 +181,11 @@
 			}
 
 			.card.open .card-left {
-				transform: rotateY(-130deg);
+				transform: rotateY(-135deg);
 			}
 
 			.card.open .card-right {
-				transform: rotateY(130deg);
+				transform: rotateY(135deg);
 			}
 
 			.card-content {
@@ -161,49 +196,53 @@
 				flex-direction: column;
 				align-items: center;
 				justify-content: center;
-				background: linear-gradient(145deg, #ffffff 0%, #fff5f5 100%);
+				background: linear-gradient(145deg, #ffffff 0%, #fff8f8 100%);
 				border: 3px solid #d4af37;
 				border-radius: 10px;
-				box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.2);
+				box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.2),
+					0 10px 50px rgba(247, 96, 112, 0.3);
 				text-align: center;
-				padding: 55px 45px;
+				padding: clamp(20px, 5vw, 55px) clamp(20px, 5vw, 45px);
 				opacity: 0;
-				transition: opacity 1.2s ease 1.2s;
+				transition: opacity 1.4s ease 1.4s;
 				pointer-events: none;
 				overflow-y: auto;
-			}
-
-			.card-content::before {
-				content: "";
-			}
-
-			.card-content::after {
-				content: "";
 			}
 
 			.card.open .card-content {
 				opacity: 1;
 				pointer-events: auto;
+				animation: contentFadeIn 0.6s ease forwards;
+			}
+
+			@keyframes contentFadeIn {
+				from {
+					opacity: 0;
+					transform: scale(0.95);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
 			}
 
 			.card-content h2 {
 				font-family: "Dancing Script", cursive;
-				font-size: 24px;
+				font-size: clamp(18px, 4vw, 24px);
 				font-weight: 700;
-				margin-bottom: 20px;
-				margin-top: 8px;
+				margin-bottom: 15px;
 				color: #e60073;
-				text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+				text-shadow: 0 2px 4px rgba(230, 0, 115, 0.2);
 				letter-spacing: 0.5px;
 				line-height: 1.4;
 			}
 
 			.card-content p {
 				font-family: "Quicksand", sans-serif;
-				font-size: 14.5px;
+				font-size: clamp(12px, 2.5vw, 14.5px);
 				line-height: 1.7;
 				color: #333;
-				margin-bottom: 10px;
+				margin-bottom: 8px;
 				font-weight: 500;
 			}
 
@@ -218,10 +257,10 @@
 
 			.card-front {
 				font-family: "Playfair Display", serif;
-				font-size: 80px;
+				font-size: clamp(50px, 12vw, 80px);
 				font-weight: bold;
 				color: #8b4049;
-				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 				z-index: 1;
 				position: relative;
 			}
@@ -230,24 +269,21 @@
 				position: absolute;
 				color: #d4af37;
 				opacity: 0.4;
-				font-size: 60px;
+				font-size: clamp(40px, 8vw, 60px);
 			}
 
 			.ornament.top-left {
 				top: 15px;
 				left: 15px;
 			}
-
 			.ornament.top-right {
 				top: 15px;
 				right: 15px;
 			}
-
 			.ornament.bottom-left {
 				bottom: 15px;
 				left: 15px;
 			}
-
 			.ornament.bottom-right {
 				bottom: 15px;
 				right: 15px;
@@ -255,15 +291,16 @@
 
 			.click-hint {
 				position: absolute;
-				bottom: -50px;
+				bottom: -45px;
 				left: 50%;
 				transform: translateX(-50%);
 				color: white;
-				font-size: 16px;
+				font-size: clamp(14px, 3vw, 16px);
 				opacity: 0.8;
 				animation: pulse 2s ease-in-out infinite;
 				pointer-events: none;
 				font-family: "Quicksand", sans-serif;
+				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 			}
 
 			.card.open .click-hint {
@@ -278,7 +315,7 @@
 				}
 				50% {
 					opacity: 1;
-					transform: translateX(-50%) scale(1.05);
+					transform: translateX(-50%) scale(1.08);
 				}
 			}
 
@@ -294,9 +331,9 @@
 
 			.falling-heart {
 				position: absolute;
-				font-size: 20px;
 				opacity: 0;
 				animation: fall linear forwards;
+				filter: drop-shadow(0 0 3px rgba(255, 182, 193, 0.6));
 			}
 
 			@keyframes fall {
@@ -312,9 +349,36 @@
 					opacity: 1;
 				}
 				100% {
-					top: 100vh;
+					top: 110vh;
 					opacity: 0;
 					transform: translateX(var(--drift)) rotate(360deg);
+				}
+			}
+
+			@media (max-width: 768px) {
+				.text-overlay {
+					transform: translate(-50%, -50%) translateY(-280px);
+				}
+				.card-container {
+					transform: translate(-50%, -50%) translateY(140px);
+				}
+				canvas {
+					transform: translate(-50%, -50%) translateY(-60px) scale(0.8);
+				}
+			}
+
+			@media (max-width: 480px) {
+				.text-overlay {
+					transform: translate(-50%, -50%) translateY(-240px);
+				}
+				.card-container {
+					transform: translate(-50%, -50%) translateY(100px);
+				}
+				canvas {
+					transform: translate(-50%, -50%) translateY(-40px) scale(0.6);
+				}
+				.card-content {
+					padding: 25px 20px;
 				}
 			}
 		</style>
@@ -381,7 +445,6 @@
 			const CANVAS_CENTER_X = CANVAS_WIDTH / 2;
 			const CANVAS_CENTER_Y = CANVAS_HEIGHT / 2;
 			const IMAGE_ENLARGE = 11;
-			const HEART_COLOR = "#f76070";
 
 			function heartFunction(t, shrinkRatio = IMAGE_ENLARGE) {
 				let x = 16 * Math.pow(Math.sin(t), 3);
@@ -420,6 +483,21 @@
 
 			function curve(p) {
 				return (2 * (2 * Math.sin(4 * p))) / (2 * Math.PI);
+			}
+
+			function getGradientColor(x, y) {
+				const dx = x - CANVAS_CENTER_X;
+				const dy = y - CANVAS_CENTER_Y;
+				const angle = Math.atan2(dy, dx);
+				const dist = Math.sqrt(dx * dx + dy * dy);
+				const maxDist = 200;
+				const ratio = Math.min(dist / maxDist, 1);
+
+				const hue = ((angle + Math.PI) / (2 * Math.PI)) * 60 + 330;
+				const saturation = 85 + ratio * 15;
+				const lightness = 55 + Math.sin(Date.now() / 1000 + ratio * 3) * 10;
+
+				return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 			}
 
 			class Heart {
@@ -533,7 +611,7 @@
 					ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 					const points = this.allPoints[frame % this.generateFrame];
 					points.forEach(([x, y, size]) => {
-						ctx.fillStyle = HEART_COLOR;
+						ctx.fillStyle = getGradientColor(x, y);
 						ctx.fillRect(Math.floor(x), Math.floor(y), size, size);
 					});
 				}
